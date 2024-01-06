@@ -21,6 +21,7 @@ const CardContent = ({
   isInSale,
   img,
   onDelete = false,
+  imgFlag = true,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,11 +38,13 @@ const CardContent = ({
 
   return (
     <div key={id} className={styles.card}>
-      <button onClick={() => handleProductDetails(id)}>
-        <div>
-          <img src={img} alt="Uma bela planta em seu vaso" />
-        </div>
-      </button>
+      {imgFlag && (
+        <button onClick={() => handleProductDetails(id)}>
+          <div>
+            <img src={img} alt="Uma bela planta em seu vaso" />
+          </div>
+        </button>
+      )}
 
       <div className={styles.cardContent}>
         <p id={styles.name}>{name}</p>

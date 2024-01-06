@@ -3,7 +3,7 @@
 import close from "../../assets/LogoutModalImg/close.svg";
 import cactuLogout from "../../assets/LogoutModalImg/cactoTriste.png";
 import ButtonHome from "../UI/Home/ButtonHome/ButtonHome";
-import CardContent from '../CardContent/CardContent'
+import CardContent from "../CardContent/CardContent";
 import styles from "./styles.module.css";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ const LogoutModal = ({ isOpen, onClose }) => {
   const handleLogInOut = () => {
     dispatch(userActions.handleUpdateLogin());
     localStorage.setItem("isLogado", false);
+    dispatch(userActions.handleClearCart());
     onClose();
     navigate(`/`);
   };
@@ -29,8 +30,6 @@ const LogoutModal = ({ isOpen, onClose }) => {
   return (
     <dialog className={isOpen ? styles.modalContainer : styles.modalOff}>
       <section className={styles.modal}>
-        {console.log(localStorage + currentLoginStorage)}
-        {console.log(typeof currentLoginStorage)}
         {currentLoginStorage === "true" ? (
           <div>
             <div id={styles.btnClose}>
@@ -42,29 +41,12 @@ const LogoutModal = ({ isOpen, onClose }) => {
             <p className={styles.title}>Você deseja sair?</p>
             <p className={styles.subtitle}>Vai mesmo? ...</p>
 
-            {cart.length > 0 ? (
-              <div>
-                <p>Carrinho: </p>
-                {cart.map((item) => (
-                  <CardContent
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    price={item.price}
-                    
-                    discont={item.discountPercentage}
-                    isInSale={item.isInSale}
-                    
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className={styles.imgContainer}>
-                <img src={cactuLogout} id={styles.cactuSucess} />
-              </div>
-            )}
+            <div className={styles.imgContainer}>
+              <img src={cactuLogout} id={styles.cactuSucess} />
+            </div>
 
-            <ButtonHome onClick={handleLogInOut}>Sair</ButtonHome><hr></hr>
+            <ButtonHome onClick={handleLogInOut}>Sair</ButtonHome>
+            <hr></hr>
             <p className={styles.subtitle}>
               Logado como: {currentEmailStorage}
             </p>
@@ -78,7 +60,6 @@ const LogoutModal = ({ isOpen, onClose }) => {
             </div>
 
             <Login onClose={onClose} />
-            
           </div>
         )}
       </section>

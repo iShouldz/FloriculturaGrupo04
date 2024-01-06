@@ -39,6 +39,9 @@ const SignUp = () => {
     const dataUser = {
       email: email,
       password: password,
+      cart: [
+        
+      ]
     };
 
     console.log(dataUser);
