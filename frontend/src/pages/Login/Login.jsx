@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/login/loginSlice";
 import ButtonHome from "../../components/UI/Home/ButtonHome/ButtonHome";
 import ErrosForm from "../../components/ErrosForm/ErrosForm";
@@ -28,6 +28,7 @@ const schema = yup
 const Login = ({ onClose }) => {
   const navigate = useNavigate();
   const [erroLogin, setErroLogin] = useState()
+  const cart = useSelector((state) => state.login.cart);
 
   const {
     register,
@@ -44,14 +45,19 @@ const Login = ({ onClose }) => {
     try {
       const response = await fetch("http://localhost:3000/users");
       const users = await response.json();
+
       const user = users.find(
         (user) => user.email === data.email && user.password === data.password
       );
-
       if (user) {
         navigate("/");
+        console.log(user)
+        console.log(user.cart)
         dispatch(userActions.handleUpdateLogin());
         localStorage.setItem('isLogado', true);
+        localStorage.setItem('emailUser', data.email);
+        localStorage.setItem('currentUserID', user.id);
+        dispatch(userActions.handleCartAdd(user.cart));
         onClose();
       } else {
         setErroLogin("Failed to login, verify your credentials");
