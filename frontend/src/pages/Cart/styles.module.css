@@ -43,3 +43,34 @@
   line-height: normal;
   text-transform: capitalize;
 }
+
+#subtitle {
+  color: var(--Dark-gray, #afb2aa);
+
+  /* Primary/card heading */
+  font-family: Lato;
+  font-size: var(--fonte-media);
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 13px;
+  margin-left: 0;
+  display: flex;
+  justify-content: center;
+}
+
+#btnCenter{
+  display: flex;
+  justify-content: center;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+
+}
+
+#cactuSucess {
+  width: 10%;
+}

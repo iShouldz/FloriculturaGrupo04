@@ -9,6 +9,7 @@ import styles from "./Header.module.css";
 
 import logo from "../../assets/HeaderImg/logo.svg";
 import profile from "../../assets/HeaderImg/profileLogo.svg";
+import cart from "../../assets/carrinho-de-compras.png";
 
 import "./GlobalMenu.css";
 import CarrinhoAddModal from "../CarrinhoAddModal/CarrinhoAddModal";
@@ -144,8 +145,18 @@ const Header = () => {
           </div>
         )}
 
-        <div>
-        <Nav to={"/cart"}>Carrinho</Nav>
+        <div >
+          <button
+            onClick={() => {
+              navigate("/cart");
+            }}
+            style={{ marginRight: "30px"}}
+          >
+            <figure>
+              <img src={cart} alt="" />
+            </figure>
+          </button>
+
           <button onClick={handleLog}>
             <figure>
               <img src={profile} alt="" style={{ width: "50px" }} />
