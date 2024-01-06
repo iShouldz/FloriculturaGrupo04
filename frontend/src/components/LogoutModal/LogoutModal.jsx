@@ -3,6 +3,7 @@
 import close from "../../assets/LogoutModalImg/close.svg";
 import cactuLogout from "../../assets/LogoutModalImg/cactoTriste.png";
 import ButtonHome from "../UI/Home/ButtonHome/ButtonHome";
+import CardContent from '../CardContent/CardContent'
 import styles from "./styles.module.css";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +16,8 @@ const LogoutModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const login = useSelector((state) => state.login.isLogado);
   const currentLoginStorage = localStorage.getItem("isLogado");
+  const currentEmailStorage = localStorage.getItem("emailUser");
+  const cart = useSelector((state) => state.login.cart);
 
   const handleLogInOut = () => {
     dispatch(userActions.handleUpdateLogin());
@@ -39,11 +42,32 @@ const LogoutModal = ({ isOpen, onClose }) => {
             <p className={styles.title}>Você deseja sair?</p>
             <p className={styles.subtitle}>Vai mesmo? ...</p>
 
-            <div className={styles.imgContainer}>
-              <img src={cactuLogout} id={styles.cactuSucess} />
-            </div>
+            {cart.length > 0 ? (
+              <div>
+                <p>Carrinho: </p>
+                {cart.map((item) => (
+                  <CardContent
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    price={item.price}
+                    
+                    discont={item.discountPercentage}
+                    isInSale={item.isInSale}
+                    
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className={styles.imgContainer}>
+                <img src={cactuLogout} id={styles.cactuSucess} />
+              </div>
+            )}
 
-            <ButtonHome onClick={handleLogInOut}>Sair</ButtonHome>
+            <ButtonHome onClick={handleLogInOut}>Sair</ButtonHome><hr></hr>
+            <p className={styles.subtitle}>
+              Logado como: {currentEmailStorage}
+            </p>
           </div>
         ) : (
           <div>
