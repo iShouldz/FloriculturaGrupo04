@@ -16,6 +16,7 @@ import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { getPlants } from "./store/plants/plantsAction";
 import { useSelector } from "react-redux";
+import Cart from "./pages/Cart/Cart";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.login.isLogado);
@@ -57,6 +58,7 @@ function App() {
           ),
         },
         { path: "sign-up", element: <SignUp /> },
+        {path: "cart", element: <Cart />}
       ],
     },
   ]);
