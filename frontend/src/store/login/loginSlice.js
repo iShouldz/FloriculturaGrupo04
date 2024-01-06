@@ -9,10 +9,13 @@ const userSlice = createSlice({
     handleUpdateLogin(state){
         state.isLogado = !state.isLogado
     },
-    handleCartAdd(state, action){
+    handleCartAdd(state, action) {
       console.log(action.payload)
-        state.cart.push(action.payload)
-    }
+      state.cart.push(action.payload)
+    },
+    handleClearCart(state){
+      state.cart = []
+    },
   },
 });
 
