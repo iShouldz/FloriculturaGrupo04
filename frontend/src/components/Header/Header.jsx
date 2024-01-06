@@ -11,11 +11,13 @@ import logo from "../../assets/HeaderImg/logo.svg";
 import profile from "../../assets/HeaderImg/profileLogo.svg";
 
 import "./GlobalMenu.css";
+import CarrinhoAddModal from "../CarrinhoAddModal/CarrinhoAddModal";
 
 const Header = () => {
   const navigate = useNavigate();
   const [windowSize, setWindowSize] = useState(window.innerWidth);
   const [showDialog, setShowDialog] = useState(false);
+  const [showDialogCart, setShowDialogCart] = useState(false);
 
   const currentLoginStorage = localStorage.getItem("isLogado");
 
@@ -41,6 +43,9 @@ const Header = () => {
     setShowDialog((prevState) => !prevState);
   };
 
+  const closeDialogCart = () => {
+    setShowDialogCart(false);
+  };
   useEffect(() => {
     const handleWindowsResize = () => {
       setWindowSize(window.innerWidth);
@@ -139,14 +144,18 @@ const Header = () => {
           </div>
         )}
 
-        <button onClick={handleLog}>
-          <figure>
-            <img src={profile} alt="" style={{ width: "50px" }} />
-          </figure>
-        </button>
+        <div>
+        <Nav to={"/cart"}>Carrinho</Nav>
+          <button onClick={handleLog}>
+            <figure>
+              <img src={profile} alt="" style={{ width: "50px" }} />
+            </figure>
+          </button>
+        </div>
       </header>
 
       <LogoutModal isOpen={showDialog} onClose={closeDialog} />
+      <CarrinhoAddModal isOpen={showDialogCart} onClose={closeDialogCart} />
     </div>
   );
 };
