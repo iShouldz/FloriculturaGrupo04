@@ -6,6 +6,9 @@ import ButtonHome from "../../components/UI/Home/ButtonHome/ButtonHome";
 import { useEffect, useState } from "react";
 import SplitFeature from "../../components/SplitFeature/SplitFeature";
 import PriceFormated from "../../components/PriceFormated/PriceFormated";
+import UpdateModal from "../../components/UpdateModal/UpdateModal";
+import { userActions } from "../../store/login/loginSlice";
+
 
 const ProductsDetails = () => {
   const [isFetching, setIsFetching] = useState(true);
@@ -13,6 +16,9 @@ const ProductsDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const plantId = parseInt(id);
+  const currentLoginStorage = localStorage.getItem("isLogado");
+  const [showDialog, setShowDialog] = useState(false);
+  const cart = useSelector((state) => state.login.cart)
 
   useEffect(() => {
     dispatch(plantsActions.handleGetPlantDetails(plantId));
@@ -27,6 +33,11 @@ const ProductsDetails = () => {
       plantName
     )}`;
   };
+
+  const closeDialog = () => {
+    setShowDialog(false);
+  };
+
 
   return (
     <>
@@ -50,6 +61,21 @@ const ProductsDetails = () => {
               })}
             </div>
 
+            {currentLoginStorage === "true" && (
+              <p style={{ display: "flex" }}>
+                <p id={styles.subtitle}>
+                  Created by {plantSelected.createdBy}{" "}
+                </p>
+                <ButtonHome
+                  onClick={() => {
+                    setShowDialog(true);
+                  }}
+                >
+                  Update Plant
+                </ButtonHome>
+              </p>
+            )}
+
             <PriceFormated
               price={price}
               isInSale={isInSale}
@@ -58,6 +84,14 @@ const ProductsDetails = () => {
             />
 
             <ButtonHome onClick={handleSearch}>Check out</ButtonHome>
+
+            <UpdateModal
+              isOpen={showDialog}
+              onClose={closeDialog}
+              lastID={id}
+              img={plantSelected.img}
+              created={plantSelected.createdBy}
+            />
 
             <p id={styles.price}>Features</p>
 
