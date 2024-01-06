@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import styles from "./styles.module.css";
 
@@ -12,25 +13,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const schema = yup
   .object({
     name: yup
-      .string()
-      .required("Name it is a mandatory field")
-      .min(5, "Name must have at least 5 characters")
-      .matches(/^[^\d]+$/, "Name must not contain numbers"),
-    subtitle: yup
-      .string()
-      .required("Subtitle it is a mandatory field")
-      .min(5, "Subtitle must have at least 5 characters"),
-    price: yup
-      .number()
-      .positive()
-      .required("Price it is a mandatory field")
-      .typeError("Enter a valid number")
-      .min(1),
-    description: yup
-      .string()
-      .required("Description it is a mandatory field")
-      .min(5)
-      .max(500),
+      .string(),
+    subtitle: yup.string(),
+    price: yup.number().positive().typeError("Enter a valid number").min(1),
+    description: yup.string().max(500),
     discountPercentage: yup
       .number()
       .positive("Discount value must be a positive number")
@@ -56,18 +42,20 @@ const schema = yup
     labelDoor: yup.string().required(),
     features: yup
       .string()
-      .required("Features it is a mandatory field")
-      .min(5, "Features must have at least 5 characters")
       .max(200),
     plantType: yup
       .string()
-      .required("Plant Type it is a mandatory field")
-      .min(5, "Plant Type must have at least 5 characters")
-      .matches(/^[^\d]+$/, "Plant Type must not contain numbers"),
   })
   .required();
 
-const UpdateModal = ({ isOpen, onClose, lastID, img, created }) => {
+const UpdateModal = ({
+  isOpen,
+  onClose,
+  lastID,
+  img,
+  created,
+  defaultPlant,
+}) => {
   const [label, setLabel] = useState("indoor");
 
   const {
@@ -87,7 +75,7 @@ const UpdateModal = ({ isOpen, onClose, lastID, img, created }) => {
         },
         body: JSON.stringify(updatedData),
       });
-  
+
       if (response.ok) {
         console.log("Planta atualizada com sucesso!");
         window.location.reload();
@@ -121,19 +109,22 @@ const UpdateModal = ({ isOpen, onClose, lastID, img, created }) => {
     }
 
     const plantsObject = {
-        name: name,
-        subtitle: subtitle,
-        label: [plantType, labelDoor],
-        isInSale,
-        price: price,
-        discountPercentage: discountPercentage,
-        features: features,
-        description: description,
-        img: img,
-        createdBy: created
-      };
-  
-    updatePlant(lastID, plantsObject)
+      name: name === "" ? defaultPlant.name : name,
+      subtitle: subtitle === "" ? defaultPlant.subtitle : subtitle,
+      label: [plantType === "" ? defaultPlant.plantType : plantType, labelDoor],
+      isInSale,
+      price: price === "" ? defaultPlant.price : price,
+      discountPercentage:
+        discountPercentage === ""
+          ? defaultPlant.discountPercentage
+          : discountPercentage,
+      features: features === "" ? defaultPlant.features : features,
+      description: description === "" ? defaultPlant.description : description,
+      img: img,
+      createdBy: created,
+    };
+
+    updatePlant(lastID, plantsObject);
   };
 
   return (

@@ -93,6 +93,7 @@ const ProductsDetails = () => {
               lastID={id}
               img={plantSelected.img}
               created={plantSelected.createdBy}
+              defaultPlant={plantSelected}
             />
 
             <p id={styles.price}>Features</p>
