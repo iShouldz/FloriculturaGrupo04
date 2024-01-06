@@ -1,0 +1,187 @@
+.modalContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+  }
+  
+  .modal {
+    background: #f3f3f2;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-right: 32px;
+    height: 78%;
+  }
+  
+  .modalOff {
+    display: none;
+  }
+  
+  .title {
+    display: flex;
+    margin: 25px;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--Primary-Avacado, #8a9b6e);
+    text-align: center;
+  
+    /* Primary/Primary */
+    font-family: EB Garamond;
+    font-size: var(--fonte-grande);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+  }
+  
+  #btnClose {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  #img {
+    width: 50%;
+  }
+  
+  #background {
+    display: flex;
+    z-index: -2;
+  }
+  
+  #cactuSucess {
+    width: 30%;
+  }
+  
+  .imgContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .inputForm {
+    font-family: "Inter", sans-serif;
+    color: var(--IBBNB);
+    font-size: var(--fonte-pequena);
+    background-color: transparent;
+    padding: 12px 16px;
+    border-radius: 4px;
+    border: 2px solid var(--gray);
+  }
+  
+  .registerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .inputLabel {
+    font-family: var(--inter);
+    color: var(--IBBNB);
+    font-size: calc(var(--fonte-pequena) + 2);
+    font-weight: 500;
+    line-height: 22px;
+    display: flex;
+  }
+  
+  .halfInputsContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 18px;
+  }
+  
+  .halfInputsContainer p {
+    width: 50%;
+  }
+  
+  .halfInputsContainer #heightError p {
+    width: 100%;
+  }
+  
+  .registerTitle {
+    font-size: var(--fonte-media);
+    font-family: "Inter", sans-serif;
+    color: var(--luna-green);
+    border-bottom: 2px solid var(--gray);
+    padding-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  .halfInput {
+    padding: 12px 16px;
+    width: calc(100% - 33px);
+    margin-top: 16px;
+  }
+  
+  .inputTextarea {
+    font-family: "Inter", sans-serif;
+    color: var(--IBBNB);
+    font-size: var(--fonte-pequena);
+    padding: 16px;
+    height: 30px;
+    background-color: transparent;
+    border: 2px solid var(--gray);
+    border-radius: 4px;
+    resize: none;
+  }
+  
+  .inputRadioLabel {
+    font-size: var(--fonte-pequena);
+    color: var(--gray);
+    font-family: var(--inter);
+    font-weight: 500;
+    line-height: 22px;
+  }
+  
+  .inputRadio {
+    appearance: none;
+    margin: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--gray);
+  }
+  
+  .inputRadio:checked {
+    background-color: none;
+    background-image: url("../../assets/inputRadioSelected.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+  }
+  
+  .inputRadioContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .inputRadioControl {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .labelRadios {
+    font-family: "Inter", sans-serif;
+    color: var(--IBBNB);
+    font-size: calc(var(--fonte-pequena) + 2);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }

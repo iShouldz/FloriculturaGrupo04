@@ -28,10 +28,12 @@ const ProductsDetails = () => {
   let { price, isInSale, discountPercentage} = plantSelected;
 
   const handleSearch = () => {
-    const plantName = plantSelected.name;
-    window.location.href = `https://www.google.com/search?q=Comprar+${encodeURIComponent(
-      plantName
-    )}`;
+    // const plantName = plantSelected.name;
+    // window.location.href = `https://www.google.com/search?q=Comprar+${encodeURIComponent(
+    //   plantName
+    // )}`;
+    console.log(plantSelected)
+    dispatch(userActions.handleCartAdd(plantSelected))
   };
 
   const closeDialog = () => {
