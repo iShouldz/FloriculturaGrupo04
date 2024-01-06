@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { plantsActions } from "../../store/plants/plantsSlice";
@@ -8,38 +9,71 @@ import SplitFeature from "../../components/SplitFeature/SplitFeature";
 import PriceFormated from "../../components/PriceFormated/PriceFormated";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
 import { userActions } from "../../store/login/loginSlice";
-
+import CarrinhoAddModal from "../../components/CarrinhoAddModal/CarrinhoAddModal";
 
 const ProductsDetails = () => {
   const [isFetching, setIsFetching] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
+  const [showDialogCart, setShowDialogCart] = useState(false);
+
   const plantSelected = useSelector((state) => state.plants.plantSelected);
   const dispatch = useDispatch();
   const { id } = useParams();
   const plantId = parseInt(id);
+
   const currentLoginStorage = localStorage.getItem("isLogado");
-  const [showDialog, setShowDialog] = useState(false);
-  const cart = useSelector((state) => state.login.cart)
+  const currentIDStorage = localStorage.getItem("currentUserID");
+
+  const cart = useSelector((state) => state.login.cart);
 
   useEffect(() => {
     dispatch(plantsActions.handleGetPlantDetails(plantId));
     setIsFetching(false);
   }, [dispatch, plantId]);
 
-  let { price, isInSale, discountPercentage} = plantSelected;
+  let { price, isInSale, discountPercentage } = plantSelected;
 
   const handleSearch = () => {
-    // const plantName = plantSelected.name;
-    // window.location.href = `https://www.google.com/search?q=Comprar+${encodeURIComponent(
-    //   plantName
-    // )}`;
-    console.log(plantSelected)
-    dispatch(userActions.handleCartAdd(plantSelected))
+    fetch(`http://localhost:3000/users/${currentIDStorage}`)
+    .then((response) => response.json())
+    .then((user) => {
+      console.log(plantSelected)
+      console.log(user)
+      const updatedCart = user.cart.map((item) => {
+        // Se o item já existe, substitua-o no array
+        if (item.id === plantSelected.id) {
+          return plantSelected;
+        }
+        return item;
+      });
+
+      user.cart = updatedCart;
+      dispatch(userActions.handleCartAdd(plantSelected));
+      return fetch(`http://localhost:3000/users/${currentIDStorage}`, {
+        method: "PUT", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+    })
+    .then((response) => response.json())
+    .then((updatedUser) => {
+      console.log("Objeto adicionado ao carrinho com sucesso:", updatedUser);
+    })
+    .catch((error) => {
+      console.error("Erro ao adicionar objeto ao carrinho:", error);
+    });
+    setShowDialogCart(true)
   };
 
   const closeDialog = () => {
     setShowDialog(false);
   };
 
+  const closeDialogCart = () => {
+    setShowDialogCart(false);
+  };
 
   return (
     <>
@@ -86,6 +120,11 @@ const ProductsDetails = () => {
             />
 
             <ButtonHome onClick={handleSearch}>Check out</ButtonHome>
+
+            <CarrinhoAddModal
+              isOpen={showDialogCart}
+              onClose={closeDialogCart}
+            />
 
             <UpdateModal
               isOpen={showDialog}
