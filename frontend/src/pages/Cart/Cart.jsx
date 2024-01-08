@@ -4,6 +4,7 @@ import CardContent from "../../components/CardContent/CardContent";
 import { userActions } from "../../store/login/loginSlice";
 import ButtonHome from "../../components/UI/Home/ButtonHome/ButtonHome";
 import cactuLogout from "../../assets/LogoutModalImg/cactoTriste.png";
+import { deletePlant } from "../../store/plants/plantsAction";
 const Cart = () => {
   const cart = useSelector((state) => state.login.cart);
   const dispatch = useDispatch();
@@ -31,6 +32,47 @@ const Cart = () => {
     }
   };
 
+  const handleFinish = () => {
+    cart.map((item) => {
+      console.log(cart.length)
+      item.map((plant) => {
+        console.log(plant);
+        console.log(plant.id);
+        dispatch(deletePlant(plant.id));
+      });
+    });
+
+    const currentIDStorage = localStorage.getItem("currentUserID");
+
+    if (currentIDStorage) {
+      const url = `http://localhost:3000/users/${currentIDStorage}`;
+
+      fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cart: [], 
+        }),
+      })
+        .then((response) => response.json())
+        .then((updatedUser) => {
+          console.log(
+            "Conteúdo do carrinho removido com sucesso:",
+            updatedUser
+          );
+        })
+        .catch((error) => {
+          console.error("Erro ao remover conteúdo do carrinho:", error);
+        });
+    } else {
+      console.error("ID do usuário não encontrado.");
+    }
+
+    dispatch(userActions.handleClearCart());
+  };
+
   return (
     <div className={styles.productContainer}>
       <h1 className={styles.productTitle}>Carrinho</h1>
@@ -53,15 +95,15 @@ const Cart = () => {
               if (Array.isArray(item)) {
                 return item.map((nestedItem) => (
                   <div key={nestedItem.id} className={styles.cardContainer}>
-                    <p style={{display: 'none'}}>
-                    {
-                      (totalCart +=
-                        +nestedItem.price -
-                        (+nestedItem.price * +nestedItem.discountPercentage) /
-                          100)
-                    }
+                    <p style={{ display: "none" }}>
+                      {
+                        (totalCart +=
+                          +nestedItem.price -
+                          (+nestedItem.price * +nestedItem.discountPercentage) /
+                            100)
+                      }
                     </p>
-                    
+
                     <CardContent
                       id={nestedItem.id}
                       name={nestedItem.name}
@@ -96,7 +138,7 @@ const Cart = () => {
           <div id={styles.checkout}>
             <h2 id={styles.subtitle}>Check out</h2>
             <h3 id={styles.subtitle}>Total: {totalCart}</h3>
-            <ButtonHome>Finalizar compra</ButtonHome>
+            <ButtonHome onClick={handleFinish}>Finalizar compra</ButtonHome>
           </div>
         </div>
       )}
