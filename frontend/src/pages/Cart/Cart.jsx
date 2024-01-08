@@ -51,9 +51,7 @@ const Cart = () => {
               if (Array.isArray(item)) {
                 return item.map((nestedItem) => (
                   <div key={nestedItem.id} className={styles.cardContainer}>
-                    {console.log(nestedItem.discountPercentage)}
-                    {console.log('new value', (+nestedItem.price * +nestedItem.discountPercentage) - +nestedItem.price)}
-                    {totalCart += (+nestedItem.price * +nestedItem.discountPercentage  / 100) - +nestedItem.price}
+                    {totalCart += +nestedItem.price - (+nestedItem.price * +nestedItem.discountPercentage  / 100)}
                     <CardContent
                       id={nestedItem.id}
                       name={nestedItem.name}
