@@ -40,7 +40,6 @@ const ProductsDetails = () => {
       console.log(plantSelected)
       console.log(user)
       const updatedCart = user.cart.map((item) => {
-        // Se o item já existe, substitua-o no array
         if (item.id === plantSelected.id) {
           return plantSelected;
         }

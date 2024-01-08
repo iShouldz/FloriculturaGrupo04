@@ -48,7 +48,7 @@ const PlantCard = ({ listagemTotal = false, filter }) => {
     <Swiper
       spaceBetween={10}
       className={styles.swiperContainer}
-      pagination={true}
+      // pagination={true}
       onReachEnd={(teste) => {
         console.log(teste);
       }}

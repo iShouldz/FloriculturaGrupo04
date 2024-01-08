@@ -10,6 +10,7 @@ const Cart = () => {
   const currentEmailStorage = localStorage.getItem("emailUser");
 
   console.log(cart);
+  let totalCart = 0
   const handleLogin = async () => {
     try {
       const response = await fetch("http://localhost:3000/users");
@@ -50,6 +51,9 @@ const Cart = () => {
               if (Array.isArray(item)) {
                 return item.map((nestedItem) => (
                   <div key={nestedItem.id} className={styles.cardContainer}>
+                    {console.log(nestedItem.discountPercentage)}
+                    {console.log('new value', (+nestedItem.price * +nestedItem.discountPercentage) - +nestedItem.price)}
+                    {totalCart += (+nestedItem.price * +nestedItem.discountPercentage  / 100) - +nestedItem.price}
                     <CardContent
                       id={nestedItem.id}
                       name={nestedItem.name}
@@ -80,6 +84,9 @@ const Cart = () => {
               }
             })}
           </div>
+
+          <h2>Check out</h2>
+          <h3>Total: {totalCart}</h3>
         </div>
       )}
     </div>
