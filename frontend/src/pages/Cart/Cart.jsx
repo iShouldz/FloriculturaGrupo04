@@ -3,14 +3,14 @@ import styles from "./styles.module.css";
 import CardContent from "../../components/CardContent/CardContent";
 import { userActions } from "../../store/login/loginSlice";
 import ButtonHome from "../../components/UI/Home/ButtonHome/ButtonHome";
-import cactuLogout from '../../assets/LogoutModalImg/cactoTriste.png'
+import cactuLogout from "../../assets/LogoutModalImg/cactoTriste.png";
 const Cart = () => {
   const cart = useSelector((state) => state.login.cart);
   const dispatch = useDispatch();
   const currentEmailStorage = localStorage.getItem("emailUser");
 
   console.log(cart);
-  let totalCart = 0
+  let totalCart = 0;
   const handleLogin = async () => {
     try {
       const response = await fetch("http://localhost:3000/users");
@@ -36,10 +36,12 @@ const Cart = () => {
       <h1 className={styles.productTitle}>Carrinho</h1>
       {cart.length === 0 ? (
         <div>
-          <h1 id={styles.subtitle}>Ocorreu um erro, clique abaixo para corrigir</h1>
+          <h1 id={styles.subtitle}>
+            Ocorreu um erro, clique abaixo para corrigir
+          </h1>
           <div className={styles.imgContainer}>
-              <img src={cactuLogout} id={styles.cactuSucess} />
-            </div>
+            <img src={cactuLogout} id={styles.cactuSucess} />
+          </div>
           <p id={styles.btnCenter}>
             <ButtonHome onClick={handleLogin}>Reload</ButtonHome>
           </p>
@@ -51,7 +53,15 @@ const Cart = () => {
               if (Array.isArray(item)) {
                 return item.map((nestedItem) => (
                   <div key={nestedItem.id} className={styles.cardContainer}>
-                    {totalCart += +nestedItem.price - (+nestedItem.price * +nestedItem.discountPercentage  / 100)}
+                    <p style={{display: 'none'}}>
+                    {
+                      (totalCart +=
+                        +nestedItem.price -
+                        (+nestedItem.price * +nestedItem.discountPercentage) /
+                          100)
+                    }
+                    </p>
+                    
                     <CardContent
                       id={nestedItem.id}
                       name={nestedItem.name}
@@ -83,8 +93,11 @@ const Cart = () => {
             })}
           </div>
 
-          <h2>Check out</h2>
-          <h3>Total: {totalCart}</h3>
+          <div id={styles.checkout}>
+            <h2 id={styles.subtitle}>Check out</h2>
+            <h3 id={styles.subtitle}>Total: {totalCart}</h3>
+            <ButtonHome>Finalizar compra</ButtonHome>
+          </div>
         </div>
       )}
     </div>

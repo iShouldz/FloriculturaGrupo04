@@ -78,7 +78,7 @@ const schema = yup
       .string()
       .required("Features it is a mandatory field")
       .min(5, "Features must have at least 5 characters")
-      .max(200),
+      .max(500),
     plantType: yup
       .string()
       .required("Plant Type it is a mandatory field")
