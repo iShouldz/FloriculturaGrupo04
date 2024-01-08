@@ -35,35 +35,40 @@ const ProductsDetails = () => {
 
   const handleSearch = () => {
     fetch(`http://localhost:3000/users/${currentIDStorage}`)
-    .then((response) => response.json())
-    .then((user) => {
-      console.log(plantSelected)
-      console.log(user)
-      const updatedCart = user.cart.map((item) => {
-        if (item.id === plantSelected.id) {
-          return plantSelected;
-        }
-        return item;
-      });
+      .then((response) => response.json())
+      .then((user) => {
+        console.log(plantSelected);
+        console.log(user);
+        const updatedCart = [...user.cart];
 
-      user.cart = updatedCart;
-      dispatch(userActions.handleCartAdd(plantSelected));
-      return fetch(`http://localhost:3000/users/${currentIDStorage}`, {
-        method: "PUT", 
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
+        //Atualiza o carrinho do db
+        const plantIndex = updatedCart.findIndex(
+          (item) => item.id === plantSelected.id
+        );
+
+        if (plantIndex !== -1) {
+          updatedCart[plantIndex] = plantSelected;
+        } else {
+          updatedCart.push(plantSelected);
+        }
+        user.cart = updatedCart;
+        dispatch(userActions.handleCartAdd(plantSelected));
+        return fetch(`http://localhost:3000/users/${currentIDStorage}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        });
+      })
+      .then((response) => response.json())
+      .then((updatedUser) => {
+        console.log("Objeto adicionado ao carrinho com sucesso:", updatedUser);
+      })
+      .catch((error) => {
+        console.error("Erro ao adicionar objeto ao carrinho:", error);
       });
-    })
-    .then((response) => response.json())
-    .then((updatedUser) => {
-      console.log("Objeto adicionado ao carrinho com sucesso:", updatedUser);
-    })
-    .catch((error) => {
-      console.error("Erro ao adicionar objeto ao carrinho:", error);
-    });
-    setShowDialogCart(true)
+    setShowDialogCart(true);
   };
 
   const closeDialog = () => {
