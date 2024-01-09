@@ -37,7 +37,7 @@ const ProductsDetails = () => {
   let { price, isInSale, discountPercentage } = plantSelected;
 
   const handleSearch = () => {
-    fetch(`http://localhost:3000/users/${currentIDStorage}`)
+    fetch(`https://json-server-private-shz.vercel.app/users/${currentIDStorage}`)
       .then((response) => response.json())
       .then((user) => {
         console.log(plantSelected);
@@ -57,7 +57,7 @@ const ProductsDetails = () => {
           }
           setShowDialogCart(true);
           dispatch(userActions.handleCartAdd(plantSelected));
-          return fetch(`http://localhost:3000/users/${currentIDStorage}`, {
+          return fetch(`https://json-server-private-shz.vercel.app/users/${currentIDStorage}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
