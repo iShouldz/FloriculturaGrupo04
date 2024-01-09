@@ -57,7 +57,9 @@ const Login = ({ onClose }) => {
         localStorage.setItem('isLogado', true);
         localStorage.setItem('emailUser', data.email);
         localStorage.setItem('currentUserID', user.id);
-        dispatch(userActions.handleCartAdd(user.cart));
+        user.cart.map((item) => {
+          dispatch(userActions.handleCartAdd(item));
+        })
         onClose();
       } else {
         setErroLogin("Failed to login, verify your credentials");

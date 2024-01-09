@@ -10,11 +10,14 @@ import PriceFormated from "../../components/PriceFormated/PriceFormated";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
 import { userActions } from "../../store/login/loginSlice";
 import CarrinhoAddModal from "../../components/CarrinhoAddModal/CarrinhoAddModal";
+import ModalTemplate from "../../components/ModalTemplate/ModalTemplate";
+import cactuLogout from "../../assets/LogoutModalImg/cactoTriste.png";
 
 const ProductsDetails = () => {
   const [isFetching, setIsFetching] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const [showDialogCart, setShowDialogCart] = useState(false);
+  const [showDialogCartPresent, setShowDialogCartPresent] = useState(false);
 
   const plantSelected = useSelector((state) => state.plants.plantSelected);
   const dispatch = useDispatch();
@@ -39,27 +42,31 @@ const ProductsDetails = () => {
       .then((user) => {
         console.log(plantSelected);
         console.log(user);
-        const updatedCart = [...user.cart];
+        console.log(user.cart);
 
-        //Atualiza o carrinho do db
-        const plantIndex = updatedCart.findIndex(
+        const presentCart = user.cart.filter(
           (item) => item.id === plantSelected.id
         );
-
-        if (plantIndex !== -1) {
-          updatedCart[plantIndex] = plantSelected;
+        console.log(presentCart);
+        console.log(presentCart.length);
+        if (presentCart.length == 0) {
+          if (user.cart.length === 0) {
+            user.cart[0] = plantSelected;
+          } else {
+            user.cart.push(plantSelected);
+          }
+          setShowDialogCart(true);
+          dispatch(userActions.handleCartAdd(plantSelected));
+          return fetch(`http://localhost:3000/users/${currentIDStorage}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          });
         } else {
-          updatedCart.push(plantSelected);
+          setShowDialogCartPresent(true);
         }
-        user.cart = updatedCart;
-        dispatch(userActions.handleCartAdd(plantSelected));
-        return fetch(`http://localhost:3000/users/${currentIDStorage}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        });
       })
       .then((response) => response.json())
       .then((updatedUser) => {
@@ -68,7 +75,6 @@ const ProductsDetails = () => {
       .catch((error) => {
         console.error("Erro ao adicionar objeto ao carrinho:", error);
       });
-    setShowDialogCart(true);
   };
 
   const closeDialog = () => {
@@ -79,6 +85,9 @@ const ProductsDetails = () => {
     setShowDialogCart(false);
   };
 
+  const closeDialogPresentCart = () => {
+    setShowDialogCartPresent(false);
+  };
   return (
     <>
       {!isFetching && (
@@ -90,7 +99,6 @@ const ProductsDetails = () => {
           <div className={styles.plantContent}>
             <p id={styles.name}>{plantSelected.name}</p>
             <p id={styles.subtitle}>{plantSelected.subtitle}</p>
-
             <div className={styles.labelContainer}>
               {plantSelected.label.map((label) => {
                 return (
@@ -100,7 +108,6 @@ const ProductsDetails = () => {
                 );
               })}
             </div>
-
             {currentLoginStorage === "true" && (
               <p style={{ display: "flex" }}>
                 <p id={styles.subtitle}>
@@ -115,21 +122,17 @@ const ProductsDetails = () => {
                 </ButtonHome>
               </p>
             )}
-
             <PriceFormated
               price={price}
               isInSale={isInSale}
               discont={discountPercentage}
               styles={styles}
             />
-
             <ButtonHome onClick={handleSearch}>Check out</ButtonHome>
-
             <CarrinhoAddModal
               isOpen={showDialogCart}
               onClose={closeDialogCart}
             />
-
             <UpdateModal
               isOpen={showDialog}
               onClose={closeDialog}
@@ -138,11 +141,16 @@ const ProductsDetails = () => {
               created={plantSelected.createdBy}
               defaultPlant={plantSelected}
             />
-
+            <ModalTemplate
+              isOpen={showDialogCartPresent}
+              onClose={closeDialogPresentCart}
+              titulo={"Item já adicionado ao carrinho"}
+              btnContent={"Close"}
+              handleAction={closeDialogPresentCart}
+              imgCenter={cactuLogout}
+            />
             <p id={styles.price}>Features</p>
-
             <SplitFeature plantSelected={plantSelected} styles={styles} />
-
             <p id={styles.price}>Description</p>
             <div className={styles.description}>
               <p id={styles.description}>{plantSelected.description}</p>

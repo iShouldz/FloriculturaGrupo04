@@ -22,7 +22,7 @@ const Cart = () => {
         console.log(user);
         console.log(user.cart);
 
-        dispatch(userActions.handleCartAdd(user.cart));
+        dispatch(userActions.handleReplaceCart(user.cart));
       } else {
         console.log("Failed to login, verify your credentials");
       }
@@ -34,12 +34,9 @@ const Cart = () => {
 
   const handleFinish = () => {
     cart.map((item) => {
-      console.log(cart.length)
-      item.map((plant) => {
-        console.log(plant);
-        console.log(plant.id);
-        dispatch(deletePlant(plant.id));
-      });
+      console.log(item)
+      dispatch(deletePlant(item.id));
+
     });
 
     const currentIDStorage = localStorage.getItem("currentUserID");

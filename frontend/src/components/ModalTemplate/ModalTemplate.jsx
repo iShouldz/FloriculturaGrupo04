@@ -11,7 +11,7 @@ import { userActions } from "../../store/login/loginSlice";
 import { useNavigate } from "react-router-dom";
 import Login from "../../pages/Login/Login";
 
-const CarrinhoAddModal = ({ isOpen, onClose }) => {
+const ModalTemplate = ({ isOpen, onClose, titulo, btnContent,subtitulo= '', handleAction, imgCenter }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const login = useSelector((state) => state.login.isLogado);
@@ -20,46 +20,35 @@ const CarrinhoAddModal = ({ isOpen, onClose }) => {
   const cart = useSelector((state) => state.login.cart);
 
   const handleLogInOut = () => {
+    dispatch(userActions.handleUpdateLogin());
+    localStorage.setItem("isLogado", false);
+    dispatch(userActions.handleClearCart());
     onClose();
-    navigate(`/cart`);
+    navigate(`/`);
   };
 
   return (
     <dialog className={isOpen ? styles.modalContainer : styles.modalOff}>
       <section className={styles.modal}>
-        <p className={styles.title}>Plant add to cart</p>
-        {currentLoginStorage === "true" ? (
-          <div>
-            <div id={styles.btnClose}>
-              <button onClick={onClose}>
-                <img src={close} id={styles.img} />
-              </button>
-            </div>
-
-            {/* <div>
-              {cart.map((item) => (
-                <li key={item.id}>{item.id} - {item.price}</li>
-              ))}
-            </div> */}
-
-            <button onClick={handleLogInOut}>
-              Visualizar carrinho
+        <div>
+          <div id={styles.btnClose}>
+            <button onClick={onClose}>
+              <img src={close} id={styles.img} />
             </button>
-            <hr></hr>
           </div>
-        ) : (
-          <div>
-            <div id={styles.btnClose}>
-              <button onClick={onClose}>
-                <img src={close} id={styles.img} />
-              </button>
-            </div>
 
-            <Login onClose={onClose} />
+          <p className={styles.title}>{titulo}</p>
+          <p className={styles.subtitle}>{subtitulo}</p>
+
+          <div className={styles.imgContainer}>
+            <img src={imgCenter} id={styles.cactuSucess} />
           </div>
-        )}
+
+          <ButtonHome onClick={handleAction}>{btnContent}</ButtonHome>
+          <hr></hr>
+        </div>
       </section>
     </dialog>
   );
 };
-export default CarrinhoAddModal;
+export default ModalTemplate;

@@ -28,7 +28,7 @@ function App() {
     localStorage.setItem("isLogado", false);
   }
 
-  console.log(isAuthenticated);
+  // console.log(isAuthenticated);
 
   const router = createBrowserRouter([
     {

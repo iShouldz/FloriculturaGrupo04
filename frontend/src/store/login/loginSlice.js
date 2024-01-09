@@ -16,6 +16,9 @@ const userSlice = createSlice({
     handleClearCart(state){
       state.cart = []
     },
+    handleReplaceCart(state, action){
+      state.cart = action.payload
+    }
   },
 });
 
