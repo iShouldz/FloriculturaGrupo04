@@ -14,7 +14,7 @@ const Cart = () => {
   let totalCart = 0;
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:3000/users");
+      const response = await fetch("https://json-server-private-shz.vercel.app/users");
       const users = await response.json();
 
       const user = users.find((user) => user.email === currentEmailStorage);
