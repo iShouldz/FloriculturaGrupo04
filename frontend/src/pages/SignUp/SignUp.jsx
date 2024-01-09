@@ -46,7 +46,7 @@ const SignUp = () => {
 
     console.log(dataUser);
 
-    fetch("http://localhost:3000/users", {
+    fetch("https://json-server-private-shz.vercel.app/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
