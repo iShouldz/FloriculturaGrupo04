@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { plantsActions } from "../../store/plants/plantsSlice";
 import styles from "./styles.module.css";
 import ButtonHome from "../../components/UI/Home/ButtonHome/ButtonHome";
@@ -18,6 +18,7 @@ const ProductsDetails = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [showDialogCart, setShowDialogCart] = useState(false);
   const [showDialogCartPresent, setShowDialogCartPresent] = useState(false);
+  const navigate = useNavigate();
 
   const plantSelected = useSelector((state) => state.plants.plantSelected);
   const dispatch = useDispatch();
@@ -37,7 +38,9 @@ const ProductsDetails = () => {
   let { price, isInSale, discountPercentage } = plantSelected;
 
   const handleSearch = () => {
-    fetch(`https://json-server-private-shz.vercel.app/users/${currentIDStorage}`)
+    fetch(
+      `https://json-server-private-shz.vercel.app/users/${currentIDStorage}`
+    )
       .then((response) => response.json())
       .then((user) => {
         console.log(plantSelected);
@@ -57,13 +60,16 @@ const ProductsDetails = () => {
           }
           setShowDialogCart(true);
           dispatch(userActions.handleCartAdd(plantSelected));
-          return fetch(`https://json-server-private-shz.vercel.app/users/${currentIDStorage}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-          });
+          return fetch(
+            `https://json-server-private-shz.vercel.app/users/${currentIDStorage}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(user),
+            }
+          );
         } else {
           setShowDialogCartPresent(true);
         }
@@ -88,6 +94,12 @@ const ProductsDetails = () => {
   const closeDialogPresentCart = () => {
     setShowDialogCartPresent(false);
   };
+
+  const handleLogInOut = () => {
+    setShowDialogCart(false);
+    navigate(`/cart`);
+  };
+
   return (
     <>
       {!isFetching && (
@@ -129,10 +141,15 @@ const ProductsDetails = () => {
               styles={styles}
             />
             <ButtonHome onClick={handleSearch}>Check out</ButtonHome>
-            <CarrinhoAddModal
+            <ModalTemplate
               isOpen={showDialogCart}
               onClose={closeDialogCart}
+              titulo={"Planta adicionada ao carrinho"}
+              btnContent={"Visualizar carrinho"}
+              handleAction={handleLogInOut}
+              //imgCenter={cactuSucess}
             />
+
             <UpdateModal
               isOpen={showDialog}
               onClose={closeDialog}

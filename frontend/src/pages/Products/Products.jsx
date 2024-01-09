@@ -8,6 +8,7 @@ import styles from "./styles.module.css";
 
 const Products = ({ listagemTotal = false, filter }) => {
   const plants = useSelector((state) => state.plants.plants);
+  const cart = useSelector(state => state.login.cart)
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -21,7 +22,12 @@ const Products = ({ listagemTotal = false, filter }) => {
   );
 
   const categoryOptions = ["all", "indoor", "outdoor"];
-
+  console.log(cart)
+  console.log(filteredPlants)
+  const filteredPlantsCart = filteredPlants.filter((plant) => {
+    return !cart.some((item) => item.id === plant.id);
+  });
+  console.log(filteredPlantsCart)
   return (
     <>
       <div className={styles.productContainer}>
@@ -61,7 +67,7 @@ const Products = ({ listagemTotal = false, filter }) => {
         </div>
 
         <div className={styles.productList}>
-          {filteredPlants.map((plant) => (
+          {filteredPlantsCart.map((plant) => (
             <div key={plant.id} className={styles.cardContainer}>
               <CardContent
                 id={plant.id}

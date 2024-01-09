@@ -93,6 +93,7 @@ const Register = () => {
   const [lastID, setLastID] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const navigate = useNavigate();
+  const currentEmailStorage = localStorage.getItem('emailUser')
 
   const {
     register,
@@ -138,6 +139,7 @@ const Register = () => {
       features: features,
       description: description,
       img: getRandomImage(),
+      createdBy: currentEmailStorage
     };
 
     fetch("https://json-server-private-shz.vercel.app/plants", {

@@ -4,17 +4,44 @@ import CardContent from "../../components/CardContent/CardContent";
 import { userActions } from "../../store/login/loginSlice";
 import ButtonHome from "../../components/UI/Home/ButtonHome/ButtonHome";
 import cactuLogout from "../../assets/LogoutModalImg/cactoTriste.png";
+import cactuSucess from '../../assets/RegisterModalImg/cactuSucess.png'
 import { deletePlant } from "../../store/plants/plantsAction";
+import ModalTemplate from "../../components/ModalTemplate/ModalTemplate";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const cart = useSelector((state) => state.login.cart);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const currentEmailStorage = localStorage.getItem("emailUser");
 
+  const [showDialogCartPresent, setShowDialogCartPresent] = useState(false)
+
   console.log(cart);
   let totalCart = 0;
+
+  cart.map((item) => {
+    console.log(item);
+    if (item.isInSale === "notPromo") {
+      totalCart += item.price;
+    } else {
+      totalCart += +item.price - (+item.price * +item.discountPercentage) / 100;
+    }
+  });
+
+  const closeDialogPresentCart = () => {
+    setShowDialogCartPresent(false)
+  }
+
+  const handleHome = () => {
+    navigate('/')
+  }
+
   const handleLogin = async () => {
     try {
-      const response = await fetch("https://json-server-private-shz.vercel.app/users");
+      const response = await fetch(
+        "https://json-server-private-shz.vercel.app/users"
+      );
       const users = await response.json();
 
       const user = users.find((user) => user.email === currentEmailStorage);
@@ -33,10 +60,10 @@ const Cart = () => {
   };
 
   const handleFinish = () => {
+    setShowDialogCartPresent(true)
     cart.map((item) => {
-      console.log(item)
+      console.log(item);
       dispatch(deletePlant(item.id));
-
     });
 
     const currentIDStorage = localStorage.getItem("currentUserID");
@@ -50,7 +77,7 @@ const Cart = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cart: [], 
+          cart: [],
         }),
       })
         .then((response) => response.json())
@@ -76,7 +103,7 @@ const Cart = () => {
       {cart.length === 0 ? (
         <div>
           <h1 id={styles.subtitle}>
-            Ocorreu um erro, clique abaixo para corrigir
+            Carrinho vazio, vamos comprar algo?
           </h1>
           <div className={styles.imgContainer}>
             <img src={cactuLogout} id={styles.cactuSucess} />
@@ -84,7 +111,16 @@ const Cart = () => {
           <p id={styles.btnCenter}>
             <ButtonHome onClick={handleLogin}>Reload</ButtonHome>
           </p>
+          <ModalTemplate
+              isOpen={showDialogCartPresent}
+              onClose={closeDialogPresentCart}
+              titulo={"Compra realizada com sucesso!"}
+              btnContent={"Close"}
+              handleAction={handleHome}
+              imgCenter={cactuSucess}
+            />
         </div>
+        
       ) : (
         <div>
           <div className={styles.productList}>
@@ -92,15 +128,6 @@ const Cart = () => {
               if (Array.isArray(item)) {
                 return item.map((nestedItem) => (
                   <div key={nestedItem.id} className={styles.cardContainer}>
-                    <p style={{ display: "none" }}>
-                      {
-                        (totalCart +=
-                          +nestedItem.price -
-                          (+nestedItem.price * +nestedItem.discountPercentage) /
-                            100)
-                      }
-                    </p>
-
                     <CardContent
                       id={nestedItem.id}
                       name={nestedItem.name}
@@ -109,8 +136,10 @@ const Cart = () => {
                       discont={nestedItem.discountPercentage}
                       isInSale={nestedItem.isInSale}
                       img={nestedItem.img}
-                      onDelete={true}
+                      onDelete={false}
                     />
+
+                    <button>Remover</button>
                   </div>
                 ));
               } else {
@@ -124,17 +153,20 @@ const Cart = () => {
                       discont={item.discountPercentage}
                       isInSale={item.isInSale}
                       img={item.img}
-                      onDelete={true}
+                      onDelete={false}
                     />
+
                   </div>
                 );
               }
             })}
+
+            
           </div>
 
           <div id={styles.checkout}>
             <h2 id={styles.subtitle}>Check out</h2>
-            <h3 id={styles.subtitle}>Total: {totalCart}</h3>
+            <h3 id={styles.subtitle}>Total: ${totalCart.toFixed(2)}</h3>
             <ButtonHome onClick={handleFinish}>Finalizar compra</ButtonHome>
           </div>
         </div>
