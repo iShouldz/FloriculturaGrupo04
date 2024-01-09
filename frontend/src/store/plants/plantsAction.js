@@ -3,7 +3,7 @@ import { plantsActions } from "./plantsSlice";
 const deletePlant = (id) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`http://localhost:3000/plants/${id}`, {
+      const response = await fetch(`https://json-server-private-shz.vercel.app/plants/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -19,7 +19,7 @@ const deletePlant = (id) => {
 
 async function getPlants() {
   const fetchData = async () => {
-    const response = await fetch("http://localhost:3000/plants");
+    const response = await fetch("https://json-server-private-shz.vercel.app/plants");
     const data = await response.json();
     return data;
   };

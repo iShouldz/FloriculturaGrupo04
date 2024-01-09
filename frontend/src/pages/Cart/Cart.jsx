@@ -42,7 +42,7 @@ const Cart = () => {
     const currentIDStorage = localStorage.getItem("currentUserID");
 
     if (currentIDStorage) {
-      const url = `http://localhost:3000/users/${currentIDStorage}`;
+      const url = `https://json-server-private-shz.vercel.app/users/${currentIDStorage}`;
 
       fetch(url, {
         method: "PATCH",

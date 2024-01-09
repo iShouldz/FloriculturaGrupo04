@@ -68,7 +68,7 @@ const UpdateModal = ({
 
   const updatePlant = async (plantId, updatedData) => {
     try {
-      const response = await fetch(`http://localhost:3000/plants/${plantId}`, {
+      const response = await fetch(`https://json-server-private-shz.vercel.app/plants/${plantId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
