@@ -140,7 +140,7 @@ const Register = () => {
       img: getRandomImage(),
     };
 
-    fetch("http://localhost:3000/plants", {
+    fetch("https://json-server-private-shz.vercel.app/plants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
